@@ -1,179 +1,113 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>INSIORA BUSINESS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#10131c;color:white;font-family:Arial}
-header{padding:22px;background:#191e2b;border-bottom:1px solid #444}
-h1{color:#d9b66d;margin:0}
-main{padding:18px;max-width:850px;margin:auto}
-.card{background:#1b2231;padding:18px;border-radius:13px;margin:14px 0}
-input,button{width:100%;padding:13px;margin:7px 0;border:0;border-radius:8px;font-size:15px}
-input{background:#30394b;color:white}
-button{background:#c6a15d;color:#171717;font-weight:bold}
-.secondary{background:#394357;color:white}
-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-nav button{font-size:13px;padding:12px 5px}
-.item{padding:12px;border-bottom:1px solid #394357}
-.hidden{display:none}
-small{color:#aaa}
+:root{--bg:#090a0c;--panel:#121418;--panel2:#191c21;--line:#2a2e35;--gold:#d6b46a;--gold2:#f0d99e;--muted:#9ca3ad;--text:#f4f1e9;--red:#e07878;--green:#78c99a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+header{height:68px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#0d0f12;position:sticky;top:0;z-index:4}
+.brand{font-family:'Playfair Display',serif;letter-spacing:2px;color:var(--gold2);font-size:22px}.brand small{display:block;font:10px 'DM Sans';letter-spacing:4px;color:var(--muted);margin-top:-2px}
+.wrap{display:flex;min-height:calc(100vh - 68px)}aside{width:220px;border-right:1px solid var(--line);padding:20px 12px;background:#0d0f12;flex-shrink:0}
+.nav{width:100%;text-align:left;padding:12px 14px;border:0;background:transparent;color:#c7cbd1;border-radius:9px;margin:3px 0}.nav.active,.nav:hover{background:#27231a;color:var(--gold2)}main{padding:26px;width:100%;max-width:1500px;margin:auto}.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}h1{font:700 27px 'Playfair Display';margin:0}h2{font-size:17px;margin:0 0 14px}.muted{color:var(--muted);font-size:13px}.gold{color:var(--gold2)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{background:linear-gradient(145deg,#171a1f,#111317);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}.metric{font-size:25px;font-weight:700;margin-top:8px;color:var(--gold2)}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{background:var(--gold);color:#16130c;border:0;border-radius:8px;padding:10px 14px;font-weight:700}.btn.secondary{background:#252a31;color:var(--text);border:1px solid var(--line)}.btn.danger{background:#482326;color:#ffd9d9}.btn.small{padding:6px 9px;font-size:12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px;margin-top:16px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;background:#0d1014;color:var(--text);border:1px solid #353b44;border-radius:8px;padding:11px;outline:none}.field textarea{min-height:75px;resize:vertical}.field.full{grid-column:1/-1}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--line)}th{color:var(--gold2);font-weight:600}td{color:#e2e3e5}.empty{text-align:center;padding:25px;color:var(--muted)}
+#login{max-width:420px;margin:8vh auto;padding:28px}.loginbrand{text-align:center;margin-bottom:22px}.loginbrand .brand{font-size:30px}.notice{font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#27231a;color:var(--gold2);padding:11px 16px;border-radius:9px;z-index:20;display:none}
+.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:15px;z-index:10}.modalbox{width:min(680px,100%);max-height:90vh;overflow:auto;background:#15181d;border:1px solid var(--line);border-radius:15px;padding:20px}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.status{padding:4px 8px;border-radius:20px;background:#252a31;color:var(--muted);font-size:11px}.status.paid{background:#183326;color:#9be0b5}.status.pending{background:#3a301a;color:#f0d99e}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}aside{width:65px;padding:12px 6px}.nav{font-size:0;text-align:center;padding:13px 3px}.nav span{font-size:18px}main{padding:17px}}
+@media(max-width:520px){header{padding:0 14px}.brand{font-size:19px}.grid{gap:9px}.card{padding:13px}.metric{font-size:20px}.formgrid{grid-template-columns:1fr}main{padding:14px}.topline h1{font-size:23px}}
+@media print{header,aside,.no-print{display:none!important}body{background:white;color:black}.card,.panel{background:white;color:black;border:1px solid #ddd}main{padding:0}.muted,td,th{color:#333}}
 </style>
 </head>
 <body>
-<header>
-<h1>INSIORA</h1>
-<small>BUSINESS MANAGEMENT SYSTEM</small>
-</header>
-<main>
-<section id="login" class="card">
-<h2>Welcome to INSIORA</h2>
-<p>Login to your business account</p>
-<input id="email" type="email" placeholder="Email address">
-<input id="password" type="password" placeholder="Password">
-<button onclick="loginUser()">LOGIN</button>
-<button class="secondary" onclick="signupUser()">CREATE ACCOUNT</button>
-<p id="status"></p>
-</section>
-
-<section id="app" class="hidden">
-<div class="card">
-<h2 id="welcome">Dashboard</h2>
-<p id="userEmail"></p>
-<button class="secondary" onclick="logoutUser()">LOG OUT</button>
+<div id="login" class="card">
+ <div class="loginbrand"><div class="brand">INSIORA<small>BUSINESS MANAGEMENT</small></div></div>
+ <h2 id="authTitle">Welcome back</h2>
+ <div class="field"><label>Email address</label><input id="email" type="email" autocomplete="username" placeholder="Your team email"></div>
+ <div class="field" style="margin-top:12px"><label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Password"></div>
+ <button class="btn" style="width:100%;margin-top:16px" id="authBtn" onclick="login()">Sign in</button>
+ <p class="notice">Only the two authorized INS​​IORA team email addresses can access this workspace. If you have not created your Firebase Authentication user yet, create it in Firebase Console → Authentication → Users.</p>
+ <p id="authMsg" class="notice"></p>
 </div>
-<nav>
-<button onclick="showPage('dashboard')">Dashboard</button>
-<button onclick="showPage('products')">Products</button>
-<button onclick="showPage('orders')">Orders</button>
-<button onclick="showPage('expenses')">Expenses</button>
-<button onclick="showPage('bookings')">Bookings</button>
-<button onclick="showPage('reports')">Reports</button>
-</nav>
-<div id="content" class="card"></div>
-</section>
-</main>
-
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,collection,addDoc,onSnapshot,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+<div id="app" class="hidden">
+<header><div class="brand">INSIORA<small>BUSINESS MANAGEMENT</small></div><div class="actions"><span id="who" class="muted"></span><button class="btn secondary small" onclick="logout()">Log out</button></div></header>
+<div class="wrap">
+<aside>
+<button class="nav active" data-page="dashboard" onclick="go('dashboard')"><span>⌂</span> Dashboard</button>
+<button class="nav" data-page="products" onclick="go('products')"><span>▣</span> Products & Stock</button>
+<button class="nav" data-page="orders" onclick="go('orders')"><span>▤</span> Orders</button>
+<button class="nav" data-page="bookings" onclick="go('bookings')"><span>◷</span> Photo Bookings</button>
+<button class="nav" data-page="expenses" onclick="go('expenses')"><span>−</span> Expenses</button>
+<button class="nav" data-page="invoices" onclick="go('invoices')"><span>▧</span> Invoices</button>
+<button class="nav" data-page="reports" onclick="go('reports')"><span>▥</span> Reports</button>
+</aside>
+<main id="content"></main>
+</div></div>
+<div id="modal" class="modal hidden"><div class="modalbox"><div class="modalhead"><h2 id="modalTitle">Add</h2><button class="btn secondary small" onclick="closeModal()">Close ✕</button></div><div id="modalBody"></div></div></div>
+<div id="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
 const firebaseConfig = {
-apiKey: "AIzaSyAwb_nsFMwuaWT5DXWy6StkwcMLK-YYy90",
-authDomain: "insiora-business.firebaseapp.com",
-projectId: "insiora-business",
-storageBucket: "insiora-business.firebasestorage.app",
-messagingSenderId: "481256205092",
-appId: "1:481256205092:web:fcd19f690ae66944cea1b1",
-measurementId: "G-MJZYQNF7FG"
+ apiKey: "AIzaSyAwb_nsFMwuaWT5DXWy6StkwcMLK-YYy90",
+ authDomain: "insiora-business.firebaseapp.com",
+ projectId: "insiora-business",
+ storageBucket: "insiora-business.firebasestorage.app",
+ messagingSenderId: "481256205092",
+ appId: "1:481256205092:web:fcd19f690ae66944cea1b1",
+ measurementId: "G-MJZYQNF7FG"
 };
-
-const fb=initializeApp(firebaseConfig);
-const auth=getAuth(fb);
-const db=getFirestore(fb);
-const allowed=["sithumdinuranga45@gmail.com","indrachapaweerakon@gmail.com"];
-let currentPage="dashboard";
-let unsubscribe=null;
-
-window.loginUser=async()=>{
-try{
-const email=document.getElementById("email").value.trim().toLowerCase();
-if(!allowed.includes(email))throw Error("Email is not allowed.");
-await signInWithEmailAndPassword(auth,email,document.getElementById("password").value);
-}catch(e){document.getElementById("status").textContent=e.message;}
-};
-
-window.signupUser=async()=>{
-try{
-const email=document.getElementById("email").value.trim().toLowerCase();
-if(!allowed.includes(email))throw Error("Email is not allowed.");
-await createUserWithEmailAndPassword(auth,email,document.getElementById("password").value);
-}catch(e){document.getElementById("status").textContent=e.message;}
-};
-
-window.logoutUser=()=>signOut(auth);
-
-onAuthStateChanged(auth,user=>{
-if(user && allowed.includes(user.email.toLowerCase())){
-document.getElementById("login").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
-document.getElementById("userEmail").textContent=user.email;
-showPage("dashboard");
-}else{
-if(user)signOut(auth);
-document.getElementById("login").classList.remove("hidden");
-document.getElementById("app").classList.add("hidden");
-}
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(), db=firebase.firestore();
+const TEAM=['sithumdinuranga45@gmail.com','indrachapaweerakon@gmail.com'];
+let user=null, current='dashboard', cache={products:[],orders:[],bookings:[],expenses:[]}, unsub=[];
+const money=n=>'LKR '+Number(n||0).toLocaleString('en-LK',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(s){let t=document.getElementById('toast');t.textContent=s;t.style.display='block';setTimeout(()=>t.style.display='none',2600)}
+function col(name){return db.collection('workspaces').doc('insiora-main').collection(name)}
+auth.onAuthStateChanged(async u=>{
+ if(u && TEAM.includes((u.email||'').toLowerCase())){user=u;document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('who').textContent=u.email;startData();go('dashboard')}
+ else {if(u) await auth.signOut();document.getElementById('login').classList.remove('hidden');document.getElementById('app').classList.add('hidden')}
 });
-
-window.showPage=(page)=>{
-currentPage=page;
-const titles={dashboard:"Dashboard",products:"Products & Stock",orders:"Customer Orders",expenses:"Expenses",bookings:"Photography Bookings",reports:"Business Reports"};
-document.getElementById("welcome").textContent=titles[page];
-if(unsubscribe)unsubscribe();
-const area=document.getElementById("content");
-if(page==="dashboard"||page==="reports"){
-loadRecords(page);
-return;
+async function login(){let e=document.getElementById('email').value.trim().toLowerCase(),p=document.getElementById('password').value;let m=document.getElementById('authMsg');if(!TEAM.includes(e)){m.textContent='This email is not authorized for this workspace.';return}try{await auth.signInWithEmailAndPassword(e,p)}catch(err){m.textContent=err.message}}
+async function logout(){unsub.forEach(f=>f());unsub=[];await auth.signOut()}
+function startData(){['products','orders','bookings','expenses'].forEach(k=>{let f=col(k).onSnapshot(s=>{cache[k]=s.docs.map(d=>({id:d.id,...d.data()}));render()},e=>toast('Database: '+e.message));unsub.push(f)})}
+function go(p){current=p;document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===p));render()}
+function sum(arr,key){return arr.reduce((a,x)=>a+Number(x[key]||0),0)}
+function pageHead(title,sub,btn){return `<div class="topline"><div><h1>${title}</h1><div class="muted">${sub}</div></div>${btn||''}</div>`}
+function render(){if(!user)return;let c=document.getElementById('content');if(!c)return;
+if(current==='dashboard'){let sales=sum(cache.orders,'total'),expenses=sum(cache.expenses,'amount'),pending=cache.orders.filter(x=>x.status!=='Paid').length;
+c.innerHTML=pageHead('Dashboard','Your business at a glance')+`<div class="grid">
+<div class="card"><div class="muted">Total sales / orders</div><div class="metric">${money(sales)}</div></div>
+<div class="card"><div class="muted">Total expenses</div><div class="metric">${money(expenses)}</div></div>
+<div class="card"><div class="muted">Estimated profit</div><div class="metric">${money(sales-expenses)}</div></div>
+<div class="card"><div class="muted">Pending orders</div><div class="metric">${pending}</div></div>
+<div class="card"><div class="muted">Products</div><div class="metric">${cache.products.length}</div></div>
+<div class="card"><div class="muted">Photo bookings</div><div class="metric">${cache.bookings.length}</div></div>
+</div><div class="panel"><h2>Recent orders</h2>${table(cache.orders.slice().sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).slice(0,5),['date','customer','item','total','status'])}</div>`}
+if(current==='products')c.innerHTML=pageHead('Products & Stock','Track products, prices and available quantity',`<button class="btn" onclick="productForm()">+ Add product</button>`)+`<div class="panel">${table(cache.products,['name','category','price','stock'])}</div>`;
+if(current==='orders')c.innerHTML=pageHead('Orders','Record customer orders and sales',`<button class="btn" onclick="orderForm()">+ New order</button>`)+`<div class="panel">${table(cache.orders,['date','customer','phone','item','total','status'])}</div>`;
+if(current==='bookings')c.innerHTML=pageHead('Photography bookings','Birthday, couple, anniversary and engagement shoots',`<button class="btn" onclick="bookingForm()">+ New booking</button>`)+`<div class="panel">${table(cache.bookings,['date','customer','phone','shoot','package','price','status'])}</div>`;
+if(current==='expenses')c.innerHTML=pageHead('Expenses','Record business costs',`<button class="btn" onclick="expenseForm()">+ Add expense</button>`)+`<div class="panel">${table(cache.expenses,['date','title','category','amount'])}</div>`;
+if(current==='invoices')c.innerHTML=pageHead('Invoices','Create a printable invoice from an order')+`<div class="panel"><p class="muted">Choose an order and print its invoice.</p>${cache.orders.map(o=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)"><span>${esc(o.customer)} · ${esc(o.item)} · ${money(o.total)}</span><button class="btn small" onclick="invoice('${o.id}')">View / Print</button></div>`).join('')||'<div class="empty">No orders yet.</div>'}</div>`;
+if(current==='reports'){let sales=sum(cache.orders,'total'),ex=sum(cache.expenses,'amount');c.innerHTML=pageHead('Reports','Current totals based on all saved records')+`<div class="grid"><div class="card"><div class="muted">Sales recorded</div><div class="metric">${money(sales)}</div></div><div class="card"><div class="muted">Expenses recorded</div><div class="metric">${money(ex)}</div></div><div class="card"><div class="muted">Profit before other costs</div><div class="metric">${money(sales-ex)}</div></div><div class="card"><div class="muted">Orders / Bookings</div><div class="metric">${cache.orders.length} / ${cache.bookings.length}</div></div></div><div class="panel"><h2>Stock summary</h2>${table(cache.products,['name','category','stock','price'])}</div>`}
 }
-const labels={
-products:["Product name","Selling price","Quantity"],
-orders:["Customer name","Order details","Amount"],
-expenses:["Expense name","Details","Amount"],
-bookings:["Customer name","Shoot type","Amount"]
-};
-const a=labels[page];
-area.innerHTML=`<h2>${titles[page]}</h2>
-<input id="f1" placeholder="${a[0]}">
-<input id="f2" placeholder="${a[1]}">
-<input id="f3" type="number" placeholder="${a[2]}">
-<button onclick="saveRecord()">SAVE</button>
-<div id="records"></div>`;
-loadRecords(page);
-};
-
-window.saveRecord=async()=>{
-try{
-const a=document.getElementById("f1").value.trim();
-const b=document.getElementById("f2").value.trim();
-const c=Number(document.getElementById("f3").value);
-if(!a||!b||!c)throw Error("Please fill all fields.");
-await addDoc(collection(db,"workspaces","insiora-main",currentPage),{
-name:a,details:b,amount:c,createdAt:serverTimestamp()
-});
-document.getElementById("f1").value="";
-document.getElementById("f2").value="";
-document.getElementById("f3").value="";
-}catch(e){alert(e.message);}
-};
-
-function loadRecords(page){
-const target=page==="dashboard"||page==="reports"?"orders":page;
-unsubscribe=onSnapshot(collection(db,"workspaces","insiora-main",target),snapshot=>{
-const records=snapshot.docs.map(d=>d.data());
-if(page==="dashboard"){
-document.getElementById("content").innerHTML=
-`<h2>Business Overview</h2><h3>Recent Orders: ${records.length}</h3><p>INSIORA is connected.</p>`;
-}else if(page==="reports"){
-const total=records.reduce((s,r)=>s+(Number(r.amount)||0),0);
-document.getElementById("content").innerHTML=
-`<h2>Reports</h2><h3>Orders recorded: ${records.length}</h3><h3>Total order value: Rs. ${total.toLocaleString()}</h3>`;
-}else{
-const box=document.getElementById("records");
-if(box)box.innerHTML=records.map(r=>
-`<div class="item"><b>${safe(r.name)}</b><br>${safe(r.details)}<br>Rs. ${Number(r.amount).toLocaleString()}</div>`
-).join("")||"No records yet";
-}
-},e=>alert("Database error: "+e.message));
-}
-function safe(v){
-return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
+function table(rows,keys){if(!rows.length)return '<div class="empty">No records yet.</div>';let labels={date:'Date',customer:'Customer',phone:'Phone',item:'Item / details',total:'Total',status:'Status',name:'Product',category:'Category',price:'Price',stock:'Stock',shoot:'Shoot type',package:'Package',title:'Expense',amount:'Amount'};return `<div class="tablewrap"><table><thead><tr>${keys.map(k=>`<th>${labels[k]||k}</th>`).join('')}<th>Action</th></tr></thead><tbody>${rows.map(r=>`<tr>${keys.map(k=>`<td>${k==='total'||k==='price'||k==='amount'?money(r[k]):k==='status'?`<span class="status ${String(r[k]).toLowerCase()==='paid'?'paid':'pending'}">${esc(r[k]||'—')}</span>`:esc(r[k]||'—')}</td>`).join('')}<td><button class="btn danger small" onclick="removeRecord('${keys[0]==='name'?'products':keys[0]==='title'?'expenses':keys.includes('shoot')?'bookings':'orders'}','${r.id}')">Delete</button></td></tr>`).join('')}</tbody></table></div>`}
+function openForm(title,fields,onSave){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=`<form id="dataForm" class="formgrid">${fields.map(f=>`<div class="field ${f.full?'full':''}"><label>${f.label}</label>${f.options?`<select name="${f.name}">${f.options.map(x=>`<option>${x}</option>`).join('')}</select>`:f.area?`<textarea name="${f.name}" placeholder="${f.placeholder||''}"></textarea>`:`<input name="${f.name}" type="${f.type||'text'}" ${f.required===false?'':'required'} placeholder="${f.placeholder||''}" ${f.step?'step="'+f.step+'"':''}>`}</div>`).join('')}<div class="field full actions"><button class="btn" type="submit">Save record</button></div></form>`;document.getElementById('modal').classList.remove('hidden');document.getElementById('dataForm').onsubmit=async e=>{e.preventDefault();let data=Object.fromEntries(new FormData(e.target).entries());fields.forEach(f=>{if(f.type==='number')data[f.name]=Number(data[f.name]||0)});data.createdAt=new Date().toISOString();try{await onSave(data);closeModal();toast('Saved successfully')}catch(err){toast(err.message)}}}
+function closeModal(){document.getElementById('modal').classList.add('hidden')}
+function productForm(){openForm('Add product',[{name:'name',label:'Product name'},{name:'category',label:'Category'},{name:'price',label:'Selling price (LKR)',type:'number',step:'0.01'},{name:'stock',label:'Opening stock quantity',type:'number'}],d=>col('products').add(d))}
+function orderForm(){openForm('New order',[{name:'date',label:'Order date',type:'date'},{name:'customer',label:'Customer name'},{name:'phone',label:'Phone number'},{name:'item',label:'Item / order details'},{name:'total',label:'Total amount (LKR)',type:'number',step:'0.01'},{name:'status',label:'Payment status',options:['Pending','Paid','Part-paid']},{name:'notes',label:'Notes',area:true,full:true}],async d=>{await col('orders').add(d)})}
+function bookingForm(){openForm('New photography booking',[{name:'date',label:'Shoot date',type:'date'},{name:'customer',label:'Customer name'},{name:'phone',label:'Phone number'},{name:'shoot',label:'Shoot type',options:['Birthday','Couple','Anniversary','Engagement','Wedding','Other']},{name:'package',label:'Package name'},{name:'price',label:'Package price (LKR)',type:'number',step:'0.01'},{name:'status',label:'Booking status',options:['Pending','Confirmed','Completed','Cancelled']},{name:'notes',label:'Location / notes',area:true,full:true}],d=>col('bookings').add(d))}
+function expenseForm(){openForm('Add expense',[{name:'date',label:'Date',type:'date'},{name:'title',label:'Expense description'},{name:'category',label:'Category',options:['Stock purchase','Travel','Printing','Equipment','Marketing','Other']},{name:'amount',label:'Amount (LKR)',type:'number',step:'0.01'}],d=>col('expenses').add(d))}
+async function removeRecord(k,id){if(!confirm('Delete this record?'))return;try{await col(k).doc(id).delete();toast('Deleted')}catch(e){toast(e.message)}}
+function invoice(id){let o=cache.orders.find(x=>x.id===id);if(!o)return;let w=window.open('','_blank');w.document.write(`<html><head><title>INSIORA Invoice</title><style>body{font:15px Arial;padding:40px;color:#222}h1{letter-spacing:4px;color:#9b7938}table{width:100%;border-collapse:collapse;margin-top:35px}td,th{border-bottom:1px solid #ddd;padding:14px;text-align:left}.total{text-align:right;font-size:22px;margin-top:30px}</style></head><body><h1>INSIORA</h1><p>Photo Frames · Mug Print · Gift Items · Photography</p><hr><h2>INVOICE</h2><p><b>Invoice date:</b> ${esc(o.date||'')}</p><p><b>Customer:</b> ${esc(o.customer||'')}</p><p><b>Phone:</b> ${esc(o.phone||'')}</p><table><tr><th>Description</th><th>Payment status</th><th>Amount</th></tr><tr><td>${esc(o.item||'')}</td><td>${esc(o.status||'')}</td><td>${money(o.total)}</td></tr></table><div class="total"><b>Total: ${money(o.total)}</b></div><p style="margin-top:60px">Thank you for choosing INSIORA.</p><script>window.print()<\/script></body></html>`);w.document.close()}
 </script>
-</body>
-</html>
-
+</body></html>
