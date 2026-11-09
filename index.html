@@ -1,1 +1,179 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INSIORA BUSINESS</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#10131c;color:white;font-family:Arial}
+header{padding:22px;background:#191e2b;border-bottom:1px solid #444}
+h1{color:#d9b66d;margin:0}
+main{padding:18px;max-width:850px;margin:auto}
+.card{background:#1b2231;padding:18px;border-radius:13px;margin:14px 0}
+input,button{width:100%;padding:13px;margin:7px 0;border:0;border-radius:8px;font-size:15px}
+input{background:#30394b;color:white}
+button{background:#c6a15d;color:#171717;font-weight:bold}
+.secondary{background:#394357;color:white}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+nav button{font-size:13px;padding:12px 5px}
+.item{padding:12px;border-bottom:1px solid #394357}
+.hidden{display:none}
+small{color:#aaa}
+</style>
+</head>
+<body>
+<header>
+<h1>INSIORA</h1>
+<small>BUSINESS MANAGEMENT SYSTEM</small>
+</header>
+<main>
+<section id="login" class="card">
+<h2>Welcome to INSIORA</h2>
+<p>Login to your business account</p>
+<input id="email" type="email" placeholder="Email address">
+<input id="password" type="password" placeholder="Password">
+<button onclick="loginUser()">LOGIN</button>
+<button class="secondary" onclick="signupUser()">CREATE ACCOUNT</button>
+<p id="status"></p>
+</section>
+
+<section id="app" class="hidden">
+<div class="card">
+<h2 id="welcome">Dashboard</h2>
+<p id="userEmail"></p>
+<button class="secondary" onclick="logoutUser()">LOG OUT</button>
+</div>
+<nav>
+<button onclick="showPage('dashboard')">Dashboard</button>
+<button onclick="showPage('products')">Products</button>
+<button onclick="showPage('orders')">Orders</button>
+<button onclick="showPage('expenses')">Expenses</button>
+<button onclick="showPage('bookings')">Bookings</button>
+<button onclick="showPage('reports')">Reports</button>
+</nav>
+<div id="content" class="card"></div>
+</section>
+</main>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,addDoc,onSnapshot,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyAwb_nsFMwuaWT5DXWy6StkwcMLK-YYy90",
+authDomain: "insiora-business.firebaseapp.com",
+projectId: "insiora-business",
+storageBucket: "insiora-business.firebasestorage.app",
+messagingSenderId: "481256205092",
+appId: "1:481256205092:web:fcd19f690ae66944cea1b1",
+measurementId: "G-MJZYQNF7FG"
+};
+
+const fb=initializeApp(firebaseConfig);
+const auth=getAuth(fb);
+const db=getFirestore(fb);
+const allowed=["sithumdinuranga45@gmail.com","indrachapaweerakon@gmail.com"];
+let currentPage="dashboard";
+let unsubscribe=null;
+
+window.loginUser=async()=>{
+try{
+const email=document.getElementById("email").value.trim().toLowerCase();
+if(!allowed.includes(email))throw Error("Email is not allowed.");
+await signInWithEmailAndPassword(auth,email,document.getElementById("password").value);
+}catch(e){document.getElementById("status").textContent=e.message;}
+};
+
+window.signupUser=async()=>{
+try{
+const email=document.getElementById("email").value.trim().toLowerCase();
+if(!allowed.includes(email))throw Error("Email is not allowed.");
+await createUserWithEmailAndPassword(auth,email,document.getElementById("password").value);
+}catch(e){document.getElementById("status").textContent=e.message;}
+};
+
+window.logoutUser=()=>signOut(auth);
+
+onAuthStateChanged(auth,user=>{
+if(user && allowed.includes(user.email.toLowerCase())){
+document.getElementById("login").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+document.getElementById("userEmail").textContent=user.email;
+showPage("dashboard");
+}else{
+if(user)signOut(auth);
+document.getElementById("login").classList.remove("hidden");
+document.getElementById("app").classList.add("hidden");
+}
+});
+
+window.showPage=(page)=>{
+currentPage=page;
+const titles={dashboard:"Dashboard",products:"Products & Stock",orders:"Customer Orders",expenses:"Expenses",bookings:"Photography Bookings",reports:"Business Reports"};
+document.getElementById("welcome").textContent=titles[page];
+if(unsubscribe)unsubscribe();
+const area=document.getElementById("content");
+if(page==="dashboard"||page==="reports"){
+loadRecords(page);
+return;
+}
+const labels={
+products:["Product name","Selling price","Quantity"],
+orders:["Customer name","Order details","Amount"],
+expenses:["Expense name","Details","Amount"],
+bookings:["Customer name","Shoot type","Amount"]
+};
+const a=labels[page];
+area.innerHTML=`<h2>${titles[page]}</h2>
+<input id="f1" placeholder="${a[0]}">
+<input id="f2" placeholder="${a[1]}">
+<input id="f3" type="number" placeholder="${a[2]}">
+<button onclick="saveRecord()">SAVE</button>
+<div id="records"></div>`;
+loadRecords(page);
+};
+
+window.saveRecord=async()=>{
+try{
+const a=document.getElementById("f1").value.trim();
+const b=document.getElementById("f2").value.trim();
+const c=Number(document.getElementById("f3").value);
+if(!a||!b||!c)throw Error("Please fill all fields.");
+await addDoc(collection(db,"workspaces","insiora-main",currentPage),{
+name:a,details:b,amount:c,createdAt:serverTimestamp()
+});
+document.getElementById("f1").value="";
+document.getElementById("f2").value="";
+document.getElementById("f3").value="";
+}catch(e){alert(e.message);}
+};
+
+function loadRecords(page){
+const target=page==="dashboard"||page==="reports"?"orders":page;
+unsubscribe=onSnapshot(collection(db,"workspaces","insiora-main",target),snapshot=>{
+const records=snapshot.docs.map(d=>d.data());
+if(page==="dashboard"){
+document.getElementById("content").innerHTML=
+`<h2>Business Overview</h2><h3>Recent Orders: ${records.length}</h3><p>INSIORA is connected.</p>`;
+}else if(page==="reports"){
+const total=records.reduce((s,r)=>s+(Number(r.amount)||0),0);
+document.getElementById("content").innerHTML=
+`<h2>Reports</h2><h3>Orders recorded: ${records.length}</h3><h3>Total order value: Rs. ${total.toLocaleString()}</h3>`;
+}else{
+const box=document.getElementById("records");
+if(box)box.innerHTML=records.map(r=>
+`<div class="item"><b>${safe(r.name)}</b><br>${safe(r.details)}<br>Rs. ${Number(r.amount).toLocaleString()}</div>`
+).join("")||"No records yet";
+}
+},e=>alert("Database error: "+e.message));
+}
+function safe(v){
+return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+</script>
+</body>
+</html>
+
